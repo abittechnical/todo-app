@@ -3,20 +3,20 @@ import '@fontsource/josefin-sans/variable.css'
 import { setupCounter } from './counter.js'
 
 // data
-const todos = [
+let todos = [
   { id: 1, title: 'Complete online javascript course', completed: true },
   { id: 2, title: 'Jog around the park 3x', completed: false },
   { id: 3, title: '10 minute meditation', completed: false },
   { id: 4, title: 'Read for 1 hour', completed: false },
   { id: 5, title: 'Pick up groceries', completed: false },
-  { id: 6, title: 'Complete Todo App from Frontend Mentors', completed: true },
+  { id: 6, title: 'Complete Todo App from Frontend Mentors', completed: false },
 ]
 const checkBoxClasses = {
   completed: ['border-none', 'text-white', 'bg-gradient-to-tr', 'from-purple-500', 'to-cyan-500'],
   pending: ['border-2', 'dark:border-zinc-700'],
 }
 const listItemTitleClasses = {
-  completed: ['line-through', 'text-zinc-300'],
+  completed: ['line-through', 'text-zinc-300', 'dark:text-zinc-700'],
   pending: [],
 }
 const outerHtmlListItemClasses = [
@@ -30,7 +30,7 @@ const outerHtmlListItemClasses = [
   'dark:text-zinc-600',
 ]
 const actions = {
-  'delete-item': handleDeleteItem,
+  'delete-item': deleteTaskById,
   'mark-completed': () => {},
   'clear-completed': () => {},
 }
@@ -53,8 +53,21 @@ const listItemInnerHtmlTemplate = `
 `
 
 // handlers
-function handleDeleteItem(id) {
-  //  TODO
+function addNewTask(task) {
+  todos.push(task)
+  console.log(todos)
+}
+function deleteTaskById(id) {
+  todos = todos.filter(todo => todo.id !== id)
+  updateTodosList()
+  console.log(todos)
+}
+function updateTodosList() {
+  todosList.innerHTML = ``
+  todos.forEach(({ completed, id, title }) => {
+    const listItem = createListItem({ title, id, completed })
+    todosList.appendChild(listItem)
+  })
 }
 function handleClearCompleted() {
   //  TODO
@@ -79,12 +92,22 @@ const createListItem = ({ title, id, completed }) => {
   //  3. attach event handlers
   const actionTrigger = htmlLiElement.querySelector('[data-action]')
   const _action = actionTrigger.dataset['action']
-  actionTrigger.addEventListener('click', actions[_action])
+  actionTrigger.addEventListener('click', () => actions[_action](id))
 
   //  4. return the element
   return htmlLiElement
 }
+const handleSubmit = event => {
+  event.preventDefault()
+  const { target: form } = event
+  const { task } = form
+  const _task = { id: todos.length + 1, title: task.value, completed: false }
+  addNewTask(_task)
+  updateTodosList()
+  form.reset()
+}
 
+// Setup
 const app = document.createElement('div')
 const todosList = document.createElement('ul')
 todosList.id = 'todos'
@@ -95,11 +118,7 @@ todosList.classList.add(
   'dark:divide-zinc-700',
   'overflow-y-auto'
 )
-todos.forEach(({ completed, id, title }) => {
-  const listItem = createListItem({ title, id, completed })
-  todosList.appendChild(listItem)
-})
-
+updateTodosList()
 app.classList.add('h-screen', 'relative')
 app.innerHTML = `
     <div class="h-80  relative">
@@ -117,13 +136,14 @@ app.innerHTML = `
         </svg>
       </header>
       <!--  Input -->
-      <div class="px-6 mb-6 h-16 rounded-md border bg-white dark:bg-zinc-800 dark:border-zinc-700 flex items-center space-x-4">
-        <span class="inline-block h-6 w-6 rounded-full bg-transparent border-2 dark:border-zinc-700"></span>
-        <input type="text" placeholder="create new task" class="px-2 w-full border-0 bg-inherit text-zinc-400 dark:text-zinc-600 focus:outline-none focus:ring-0 placeholder-zinc-400 dark:placeholder-zinc-600">
-      </div>
+      <form>
+        <div class="px-6 mb-6 h-16 rounded-md border bg-white dark:bg-zinc-800 dark:border-zinc-700 flex items-center space-x-4">
+            <span class="inline-block h-6 w-6 rounded-full bg-transparent border-2 dark:border-zinc-700"></span>
+            <input name="task" type="text" placeholder="create new task" class="px-2 w-full border-0 bg-inherit text-zinc-400 dark:text-zinc-600 focus:outline-none focus:ring-0 placeholder-zinc-400 dark:placeholder-zinc-600">
+        </div>
+      </form>
       <div id="container" class="relative full max-h-[440px] grid grid-rows-[1fr_50px] bg-white dark:bg-zinc-800 shadow-2xl rounded-lg divide-y dark:divide-zinc-700">
            <!---- Insert List Container Here ------------------------------->
-
         <footer class=" text-zinc-500 dark:text-zinc-600 flex items-center justify-between w-full   px-6 py-4 text-sm">
             <span class="text-xs"><span data-remaing="5">5</span> items left</span>
             <span class="font-medium tracking-wide flex items-center space-x-2">
@@ -139,6 +159,7 @@ app.innerHTML = `
 `
 const container = app.querySelector('#container')
 container.insertBefore(todosList, container.querySelector('footer'))
+app.querySelector('form').addEventListener('submit', handleSubmit)
 
 const root = document.querySelector('#root')
 root.appendChild(app)
