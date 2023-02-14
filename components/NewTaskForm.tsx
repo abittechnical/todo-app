@@ -5,10 +5,10 @@ export type NewTaskFormProps = {}
 const NewTaskForm = ({}: NewTaskFormProps) => {
   return (
     <form>
-      <div className="mb-6 flex h-16 items-center space-x-4 rounded-md border bg-white px-6 dark:border-zinc-700 dark:bg-zinc-800">
+      <div className="mb-6 flex h-16 items-center space-x-4 rounded-md border border-neutral-7 bg-white px-6 dark:border-neutralDark-7 dark:bg-neutralDark-2">
         <label
           data-role="check-box"
-          className="group inline-flex aspect-square h-7 w-7 cursor-pointer select-none items-center justify-center rounded-full border-2 text-purple-500 dark:border-zinc-700 dark:text-white"
+          className="group inline-flex aspect-square h-7 w-7 cursor-pointer select-none items-center justify-center rounded-full border-2 text-purple-500 dark:border-neutralDark-7 dark:text-neutral-12"
         >
           <input
             type="checkbox"
@@ -31,7 +31,7 @@ const NewTaskForm = ({}: NewTaskFormProps) => {
           name="task"
           type="text"
           placeholder="create new task"
-          className="w-full border-0 bg-inherit px-2 text-zinc-400 placeholder-zinc-400 focus:outline-none focus:ring-0 dark:text-zinc-600 dark:placeholder-zinc-600"
+          className="w-full border-0 bg-inherit px-2 text-neutral-11 placeholder-neutral-9 focus:outline-none focus:ring-0 dark:text-neutralDark-11 dark:placeholder-neutralDark-9"
         />
       </div>
     </form>

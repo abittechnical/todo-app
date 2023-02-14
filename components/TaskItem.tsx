@@ -10,7 +10,7 @@ export type ListItemProps = {
 }
 const TaskItem = ({ title, id, completed, onDelete, onCompleted }: ListItemProps) => {
   return (
-    <li className="group flex items-center justify-between px-6 py-4 text-zinc-600 dark:text-zinc-600">
+    <li className="group flex items-center justify-between px-6 py-4 text-neutral-11 dark:text-neutralDark-11">
       <div className="flex items-center space-x-4">
         <button
           onClick={() => onCompleted(id)}
@@ -20,7 +20,7 @@ const TaskItem = ({ title, id, completed, onDelete, onCompleted }: ListItemProps
             'group inline-flex aspect-square h-7 w-7 items-center justify-center rounded-full border-2',
             completed
               ? 'border-none bg-gradient-to-tr from-purple-500 to-cyan-500 text-white'
-              : 'border-zinc-200 text-transparent dark:border-zinc-700'
+              : 'border-neutral-7 text-transparent dark:border-neutralDark-7'
           )}
         >
           <svg
@@ -37,7 +37,7 @@ const TaskItem = ({ title, id, completed, onDelete, onCompleted }: ListItemProps
         <span
           data-role="title"
           className={clsx('w-full px-2', {
-            'text-zinc-300 line-through dark:text-zinc-700': completed,
+            'text-neutral-8 line-through dark:text-neutralDark-8': completed,
           })}
         >
           {title}
